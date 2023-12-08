@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="taller4.TestTaller4" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-12-07T01:50:40" hostname="DESKTOP-FVF9GLG" time="0.489">
+  <properties/>
+  <testcase name="Multiplicación de Matrices" classname="taller4.TestTaller4" time="0.231"/>
+  <testcase name="Multiplicación de Matrices 4x4" classname="taller4.TestTaller4" time="0.03"/>
+  <testcase name="Multiplicación de Matrices 8x8" classname="taller4.TestTaller4" time="0.054"/>
+  <testcase name="Multiplicación de Matrices 16x16" classname="taller4.TestTaller4" time="0.134"/>
+  <testcase name="Test Valores Random" classname="taller4.TestTaller4" time="0.035"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
