@@ -16,10 +16,20 @@ object proyecto {
   type Oraculo = Seq[Char] => Boolean
 
   def main(args: Array[String]): Unit = {
-    val f = generarCerraduraKleene(alfabeto,4)
     val oraculo: Oraculo = (secuencia: Seq[Char]) => secuencia.mkString == "ACGT"
     val resultado = reconstruirCadenaIngenuo(4, oraculo)
-    println(f)
+    println(resultado)
+  }
+
+  def generarCerraduraKleeneIngenua(alfabeto: Seq[Char], longitud: Int): Seq[String] = {
+    def generarRecursivo(cadenaParcial: String, n: Int): Seq[String] = {
+      if (n == 0) Seq(cadenaParcial)
+      else alfabeto.flatMap { caracter =>
+        generarRecursivo(cadenaParcial + caracter, n - 1)
+      }
+    }
+
+    generarRecursivo("", longitud)
   }
 
   def generarCerraduraKleene(alfabeto: Seq[Char], longitud: Int): Seq[String] = {
@@ -38,7 +48,7 @@ object proyecto {
     }
   }
   def reconstruirCadenaIngenuo(n:Int, oraculo: Oraculo): Option[String] = {
-    val cerradura = generarCerraduraKleene(alfabeto, n)
+    val cerradura = generarCerraduraKleeneIngenua(alfabeto, n)
     cerradura.find { secuencia =>
       oraculo(secuencia.toSeq)
     }
