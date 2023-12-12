@@ -10,32 +10,37 @@ import org.scalameter.measure
 import org.scalameter.withWarmer
 import org.scalameter.Warmer
 
-object Proyecto{
+object proyecto {
 
- def main(args: Array[String]): Unit = {
-  val x = List("C", "T", "A", "A", "C")
-  val w = PRCingenuo(x, x.length, oraculo)
-  println(w)
- }
+  val alfabeto = Seq('A','C','G','T')
+  type Oraculo = Seq[Char] => Boolean
 
-
- def oraculo(sub: String, cad: String): Boolean = {
-  cad.contains(sub)
- }
-
- def PRCingenuo(L: List[String], n: Int, f: (String, String) => Boolean): List[String] = {
-  require(n > 0)
-
-  def cerraduraIngenua(l: List[String], n: Int): List[String] = {
-   def generarCerraduraKleene(c: List[String], m: Int): List[String] = {
-    if (m > n) List.empty
-    else c ::: generarCerraduraKleene(c.flatMap(c => l.map(c + _)), m + 1)
-   }
-   generarCerraduraKleene(l, n)
+  def main(args: Array[String]): Unit = {
+    val f = generarCerraduraKleene(alfabeto,4)
+    val oraculo: Oraculo = (secuencia: Seq[Char]) => secuencia.mkString == "ACGT"
+    val resultado = reconstruirCadenaIngenuo(4, oraculo)
+    println(f)
   }
 
-  val s = cerraduraIngenua(L, n)
-  val g = s.takeWhile(f(_, (L.toString())))
-  g
- }
+  def generarCerraduraKleene(alfabeto: Seq[Char], longitud: Int): Seq[String] = {
+    def generarRecursivo(cadenaParcial: String, n: Int): Seq[String] = {
+      if (n == 0) Seq(cadenaParcial)
+      else {
+        val subcadenas = alfabeto.flatMap { caracter =>
+          generarRecursivo(cadenaParcial + caracter, n - 1)
+        }
+        Seq(cadenaParcial) ++ subcadenas
+      }
+    }
+
+    (1 to longitud).flatMap { n =>
+      generarRecursivo("", n)
+    }
+  }
+  def reconstruirCadenaIngenuo(n:Int, oraculo: Oraculo): Option[String] = {
+    val cerradura = generarCerraduraKleene(alfabeto, n)
+    cerradura.find { secuencia =>
+      oraculo(secuencia.toSeq)
+    }
+  }
 }
