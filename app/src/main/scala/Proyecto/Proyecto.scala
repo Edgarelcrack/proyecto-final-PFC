@@ -91,13 +91,25 @@ object proyecto {
 
   def reconstruirCadenaTurboMejorada(n: Int, o: Oraculo): Seq[Char] = {
     require(n > 0 && (n & (n - 1)) == 0)
-    def generarCadenas(k: Int, sc: Seq[Seq[Char]]): Seq[Seq[Char]] = {
-      if (k == 0) sc
-      else {
-        val sck = filtrar(sc, k, o)
-        generarCadenas(k - 1, sck)
+
+    def generarCadenas(k: Int, alfabeto: Seq[Char]): Seq[Seq[Char]] = {
+      if (k == 1) {
+        alfabeto.map(Seq(_)).filter(subcadena => o.predicado(subcadena))
+      } else {
+        val scPrevias = generarCadenas(k - 1, alfabeto)
+        scPrevias.flatMap(sc => alfabeto.filter(c => o.predicado(sc :+ c)).map(sc :+ _))
       }
     }
+
+    def combinarSubcadenas(subcadenas: Seq[Seq[Char]], k: Int): Seq[Seq[Char]] = {
+      if (k == n) {
+        subcadenas.filter(subcadena => subcadena.length == n)
+      } else {
+        val nuevasSubcadenas = subcadenas.flatMap(sc => subcadenas.filter(c => o.predicado(sc ++ c)).map(sc ++ _))
+        combinarSubcadenas(nuevasSubcadenas, k * 2)
+      }
+    }
+
     def filtrar(sc: Seq[Seq[Char]], k: Int, oraculo: Oraculo): Seq[Seq[Char]] = {
       sc.flatMap { s1 =>
         alfabeto.flatMap { a =>
@@ -107,13 +119,17 @@ object proyecto {
         }
       }
     }
+
     def esFiltrable(s: Seq[Char], k: Int, sc: Seq[Seq[Char]], oraculo: Oraculo): Boolean = {
       val subcadenas = (0 until k).map(i => s.drop(i).take(n))
       subcadenas.forall(w => oraculo.predicado(w) || sc.exists(_.startsWith(w)))
     }
 
-    val sc = generarCadenas(n, Seq(Seq.empty[Char]))
-    sc.reduce((s1, s2) => s1 ++ s2).take(n)
+    val subcadenasTamanio2 = generarCadenas(2, alfabeto)
+    val resultado = combinarSubcadenas(subcadenasTamanio2, 2).find(subcadena => subcadena.length == n).getOrElse(Seq.empty[Char])
+
+    resultado
+
   }
 
   def main(args: Array[String]): Unit = {
@@ -124,12 +140,11 @@ object proyecto {
 
     println(reconstruirCadenaIngenuo(t, oraculo))
 
+    println(reconstruirCadenaMejorado(t, oraculo))
 
-        println(reconstruirCadenaMejorado(t, oraculo))
+    println(reconstruirCadenaTurbo(t, oraculo))
 
-        println(reconstruirCadenaTurbo(t, oraculo))
-
-        println(reconstruirCadenaTurboMejorada(t, oraculo))
+    println(reconstruirCadenaTurboMejorada(t, oraculo))
 
   }
 }
