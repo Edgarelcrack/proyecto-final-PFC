@@ -127,6 +127,7 @@ object proyecto {
 
     println(reconstruirCadenaIngenuo(t, oraculo))
 
+
         println(reconstruirCadenaMejorado(t, oraculo))
 
         println(reconstruirCadenaTurbo(t, oraculo))
