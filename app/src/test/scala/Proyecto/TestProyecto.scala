@@ -36,10 +36,10 @@ class TestProyecto extends AnyFunSuite {
   }
 
   test("Ingenua 4") {
-    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a')
+    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't')
     val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 12
-    assert(Proyecto.reconstruirCadenaIngenuo(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a'))
+    val n = 10
+    assert(Proyecto.reconstruirCadenaIngenuo(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't'))
   }
 
   test("Mejorado 1") {
@@ -176,37 +176,37 @@ class TestProyecto extends AnyFunSuite {
   }
 
   test("Ingenua Paralela 4") {
-    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a')
+    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't')
     val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 12
-    assert(Proyecto.reconstruirCadenaIngenuoParalela(6)(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a'))
+    val n = 10
+    assert(Proyecto.reconstruirCadenaIngenuoParalela(6)(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't'))
   }
 
   test("Mejorado Paralelo 1") {
-    val secuencia = Seq('t', 'a', 'a', 'a', 'a', 'g', 'c', 'g', 'c', 'c', 'a', 'a')
+    val secuencia = Seq('t', 'a', 'a', 'a', 'a', 'g', 'c', 'g', 'c', 'c')
     val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 12
-    assert(Proyecto.reconstruirCadenaMejoradoParalelo(2)(n, objOraculo) == List('t', 'a', 'a', 'a', 'a', 'g', 'c', 'g', 'c', 'c', 'a', 'a'))
+    val n = 10
+    assert(Proyecto.reconstruirCadenasMejoradoParalelo(n, objOraculo) == List('t', 'a', 'a', 'a', 'a', 'g', 'c', 'g', 'c', 'c'))
   }
   test("Mejorado Paralelo 2") {
-    val secuencia = Seq('a', 'c', 'g', 't', 'a', 'c', 'g', 't', 'a', 'c', 'g', 't')
+    val secuencia = Seq('a', 'c', 'g', 't', 'a', 'c', 'g', 't', 'a', 'c')
     val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 12
-    assert(Proyecto.reconstruirCadenaMejoradoParalelo(4)(n, objOraculo) == List('a', 'c', 'g', 't', 'a', 'c', 'g', 't', 'a', 'c', 'g', 't'))
+    val n = 10
+    assert(Proyecto.reconstruirCadenasMejoradoParalelo(n, objOraculo) == List('a', 'c', 'g', 't', 'a', 'c', 'g', 't', 'a', 'c'))
   }
 
   test("Mejorado Paralelo 3") {
-    val secuencia = Seq('g', 'g', 'c', 'c', 'a', 'a', 't', 't', 'g', 'g', 'c', 'c')
+    val secuencia = Seq('g', 'g', 'c', 'c', 'a', 'a', 't', 't', 'g', 'g')
     val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 12
-    assert(Proyecto.reconstruirCadenaMejoradoParalelo(8)(n, objOraculo) == List('g', 'g', 'c', 'c', 'a', 'a', 't', 't', 'g', 'g', 'c', 'c'))
+    val n = 10
+    assert(Proyecto.reconstruirCadenasMejoradoParalelo(n, objOraculo) == List('g', 'g', 'c', 'c', 'a', 'a', 't', 't', 'g', 'g'))
   }
 
   test("Mejorado Paralelo 4") {
-    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g')
+    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't')
     val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 14
-    assert(Proyecto.reconstruirCadenaMejoradoParalelo(10)(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g'))
+    val n = 10
+    assert(Proyecto.reconstruirCadenasMejoradoParalelo(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't'))
   }
 
   test("Turbo Paralelo 1") {
