@@ -258,9 +258,8 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
         println(compararAlgoritmos(reconstruirCadenaTurbo,reconstruirCadenaTurboParalelo(8))(t,oraculo))
     */println("Turbomejorada")
         println(reconstruirCadenaTurboMejorada(t, oraculo))
-        println(reconstruirCadenaTurboMejoradaParalela(t, oraculo))
-        println(compararAlgoritmos(reconstruirCadenaTurboMejorada,reconstruirCadenaTurboMejoradaParalela)(t,oraculo))
-    println("acelerada")
+
+        println("acelerada")
         println(reconstruirCadenasTurboAcelerado(t, oraculo))
         //println(compararAlgoritmos(reconstruirCadenasTurboAcelerado, reconstruirCadenaTurboMejoradaParalela(t + 1))(t, oraculo))
 
