@@ -236,37 +236,7 @@ class TestProyecto extends AnyFunSuite {
     val n = 64
     assert(Proyecto.reconstruirCadenaTurboParalelo(32)(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c'))
   }
-  test("Turbo mejorada Paralelo 1") {
-    val secuencia = Seq('a', 'a', 'c', 'c')
-    val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 4
-    val u = 4
-    assert(Proyecto.reconstruirCadenaTurboMejoradaParalela(u)(n, objOraculo) == List('a', 'a', 'c', 'c'))
-  }
 
-  test("Turbo mejorada Paralelo 2") {
-    val secuencia = Seq('a', 'c', 'g', 't', 'a', 'c', 'g', 't')
-    val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 8
-    val u = 4
-    assert(Proyecto.reconstruirCadenaTurboMejoradaParalela(u)(n, objOraculo) == List('a', 'c', 'g', 't', 'a', 'c', 'g', 't'))
-  }
-
-  test("Turbo mejorada Paralelo 3") {
-    val secuencia = Seq('g', 'g', 'c', 'c', 'a', 'a', 't', 't', 'g', 'g', 'c', 'c', 'a', 'a', 't', 't')
-    val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 16
-    val u = 4
-    assert(Proyecto.reconstruirCadenaTurboMejoradaParalela(u)(n, objOraculo) == List('g', 'g', 'c', 'c', 'a', 'a', 't', 't', 'g', 'g', 'c', 'c', 'a', 'a', 't', 't'))
-  }
-
-  test("Turbo mejorada Paralelo 4") {
-    val secuencia = Seq('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c')
-    val objOraculo = Proyecto.Oraculo(s => secuencia.containsSlice(s))
-    val n = 32
-    val u = 4
-    assert(Proyecto.reconstruirCadenaTurboMejoradaParalela(u)(n, objOraculo) == List('t', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c', 't', 't', 'a', 'a', 'g', 'g', 'c', 'c'))
-  }
 
 
 }

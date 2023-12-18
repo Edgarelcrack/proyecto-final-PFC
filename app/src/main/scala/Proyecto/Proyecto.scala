@@ -218,34 +218,6 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
     resultado
   }
 
-  def reconstruirCadenaTurboMejoradaParalela(n: Int, o: Oraculo): Seq[Char] = {
-    def generarCadenas(k: Int, sc: Seq[Seq[Char]]): Seq[Seq[Char]] = {
-      if (k == 0) sc
-      else {
-        val sck = parallel(filtrar(sc, k, o), Seq.empty[Seq[Char]])._1
-        generarCadenas(k - 1, sck)
-      }
-    }
-
-    def filtrar(sc: Seq[Seq[Char]], k: Int, oraculo: Oraculo): Seq[Seq[Char]] = {
-      sc.flatMap { s1 =>
-        alfabeto.flatMap { a =>
-          val s2 = s1 :+ a
-          if (oraculo.predicado(s2) && esFiltrable(s2, k, sc, oraculo)) Seq(s2)
-          else Seq.empty
-        }
-      }
-    }
-
-    def esFiltrable(s: Seq[Char], k: Int, sc: Seq[Seq[Char]], oraculo: Oraculo): Boolean = {
-      val subcadenas = (0 until k).map(i => s.drop(i).take(n))
-      subcadenas.forall(w => oraculo.predicado(w) || sc.exists(_.startsWith(w)))
-    }
-
-    val sc = generarCadenas(n, Seq(Seq.empty[Char]))
-    sc.reduce((s1, s2) => s1 ++ s2).take(n)
-  }
-
 
   def compararAlgoritmos(Funcion1: (Int, Oraculo) => Seq[Char], Funcion2: (Int, Oraculo) => Seq[Char])(n: Int, o: Oraculo): (Double, Double, Double) = {
     val timeF1 = withWarmer(new Warmer.Default) measure {
