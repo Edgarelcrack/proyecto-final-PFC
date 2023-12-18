@@ -129,7 +129,6 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
     def generarRecursivoParalelo(cadenaParcial: Seq[Char], n: Int): Seq[Seq[Char]] = {
       if (n == 0) Seq(cadenaParcial)
       else if (umbral > n) {
-        // Ejecución paralela
         val resultadosParalelos = alfabeto.map { caracter =>
           task {
             generarRecursivoParalelo(cadenaParcial :+ caracter, n - 1)
@@ -138,7 +137,6 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
         val resultadosSeq = resultadosParalelos.map(_.join())
         resultadosSeq.flatMap(identity)
       } else {
-        // Ejecución secuencial
         alfabeto.flatMap { caracter =>
           generarRecursivoParalelo(cadenaParcial :+ caracter, n - 1)
         }
@@ -208,7 +206,7 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
         }
         combinarSubcadenasParalelo(nuevasSubcadenasParalelas, k * 2)
       } else {
-        // Ejecución secuencial
+
         val nuevasSubcadenas = subcadenas.flatMap(sc => subcadenas.filter(c => o.predicado(sc ++ c)).map(sc ++ _))
         combinarSubcadenasParalelo(nuevasSubcadenas, k * 2)
       }
@@ -219,6 +217,46 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
 
     resultado
   }
+
+  def reconstruirCadenaTurboMejoradaParalela(umbral: Int)(n: Int, o: Oraculo): Seq[Char] = {
+    def generarCadenas(k: Int, sc: Seq[Seq[Char]]): Seq[Seq[Char]] = {
+      if (k == 0) sc
+      else {
+        val sck = if (k < umbral) filtrarSecuencial(sc, k, o)
+        else filtrar(sc, k, o)
+        generarCadenas(k - 1, sck)
+      }
+    }
+
+    def filtrar(sc: Seq[Seq[Char]], k: Int, oraculo: Oraculo): Seq[Seq[Char]] = {
+      sc.flatMap { s1 =>
+        alfabeto.flatMap { a =>
+          val s2 = s1 :+ a
+          if (oraculo.predicado(s2) && esFiltrable(s2, k, sc, oraculo)) Seq(s2)
+          else Seq.empty
+        }
+      }
+    }
+
+    def filtrarSecuencial(sc: Seq[Seq[Char]], k: Int, oraculo: Oraculo): Seq[Seq[Char]] = {
+      sc.flatMap { s1 =>
+        alfabeto.flatMap { a =>
+          val s2 = s1 :+ a
+          if (oraculo.predicado(s2) && esFiltrable(s2, k, sc, oraculo)) Seq(s2)
+          else Seq.empty
+        }
+      }
+    }
+
+    def esFiltrable(s: Seq[Char], k: Int, sc: Seq[Seq[Char]], oraculo: Oraculo): Boolean = {
+      val subcadenas = (0 until k).map(i => s.drop(i).take(n))
+      subcadenas.forall(w => oraculo.predicado(w) || sc.exists(_.startsWith(w)))
+    }
+
+    val sc = generarCadenas(n, Seq(Seq.empty[Char]))
+    sc.reduce((s1, s2) => s1 ++ s2).take(n)
+  }
+
 
 
   def compararAlgoritmos(Funcion1: (Int, Oraculo) => Seq[Char], Funcion2: (Int, Oraculo) => Seq[Char])(n: Int, o: Oraculo): (Double, Double, Double) = {
@@ -240,8 +278,8 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
       }
     );
 
-    val t = 8
-    val secuencia = Seq('t', 't','a','a','t', 't','a','a')
+    val t = 64
+    val secuencia = Seq('a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c','a','a','c','c')
 
     val oraculo: Oraculo = Oraculo(s => secuencia.containsSlice(s))
 
@@ -257,14 +295,14 @@ def reconstruirCadenasMejorado(n: Int, o: Oraculo): Seq[Char] = {
     println("Turbo")
         println(reconstruirCadenaTurbo(t, oraculo))
         println(reconstruirCadenaTurboParalelo(t+1)(t, oraculo))
-        println(compararAlgoritmos(reconstruirCadenaTurboMejorada,reconstruirCadenaTurboMejoradaParalela(8))(t,oraculo))
+        println(compararAlgoritmos(reconstruirCadenaTurbo,reconstruirCadenaTurboParalelo(8))(t,oraculo))
     println("Turbomejorada")
         println(reconstruirCadenaTurboMejorada(t, oraculo))
-        println(reconstruirCadenaTurboMejoradaParalela(10)(t, oraculo))
-        println(compararAlgoritmos(reconstruirCadenaTurboMejorada,reconstruirCadenaTurboMejoradaParalela(t+1))(t,oraculo))
+        println(reconstruirCadenaTurboMejoradaParalela(0)(t, oraculo))
+        println(compararAlgoritmos(reconstruirCadenaTurboMejorada,reconstruirCadenaTurboMejoradaParalela(10))(t,oraculo))
     println("acelerada")
         println(reconstruirCadenasTurboAcelerado(t, oraculo))
-        println(compararAlgoritmos(reconstruirCadenasTurboAcelerado, reconstruirCadenaTurboMejoradaParalela(t + 1))(t, oraculo))
+        //println(compararAlgoritmos(reconstruirCadenasTurboAcelerado, reconstruirCadenaTurboMejoradaParalela(t + 1))(t, oraculo))
 
 
   }
